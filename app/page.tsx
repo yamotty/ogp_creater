@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 export default function Home() {
   const [title, setTitle] = useState("");
   const [authorName, setAuthorName] = useState("yamotty");
+  const [fileName, setFileName] = useState("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const drawBackground = (ctx: CanvasRenderingContext2D) => {
@@ -199,8 +200,19 @@ export default function Home() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    // ファイル名を決定（ユーザー指定があればそれを使用、なければデフォルト）
+    let downloadFileName: string;
+    if (fileName.trim()) {
+      // 拡張子がない場合は.pngを追加
+      downloadFileName = fileName.trim().endsWith('.png') 
+        ? fileName.trim() 
+        : `${fileName.trim()}.png`;
+    } else {
+      downloadFileName = `ogp-${Date.now()}.png`;
+    }
+
     const link = document.createElement("a");
-    link.download = `ogp-${Date.now()}.png`;
+    link.download = downloadFileName;
     link.href = canvas.toDataURL("image/png");
     link.click();
   };
@@ -252,6 +264,22 @@ export default function Home() {
                 placeholder="筆者名を入力してください"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                ファイル名（オプション）
+              </label>
+              <input
+                type="text"
+                value={fileName}
+                onChange={(e) => setFileName(e.target.value)}
+                placeholder="ファイル名を入力（未入力の場合は自動生成）"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <p className="mt-1 text-sm text-gray-500">
+                拡張子（.png）は自動で追加されます
+              </p>
             </div>
 
             <button
