@@ -81,7 +81,7 @@ export default function Home() {
       
       // 改行を考慮してテキストを描画
       const lines = text.split("\n");
-      const lineHeight = 100 * scale;
+      const lineHeight = 130 * scale; // 行間を広げる
       const startY = height / 2 - (lines.length - 1) * lineHeight / 2;
 
       lines.forEach((line, index) => {
@@ -89,11 +89,24 @@ export default function Home() {
       });
     }
 
-    // 筆者名を描画
+    // 筆者名を描画（タイトルとの間隔を広げる）
     ctx.fillStyle = "#000000";
     const authorFontSize = 48 * scale;
     ctx.font = `bold ${authorFontSize}px 'Montserrat', sans-serif`;
-    ctx.fillText("yamotty", width / 2, height / 2 + 120 * scale);
+    
+    // タイトルの最後の行の位置を計算
+    let authorY: number;
+    if (text) {
+      const lines = text.split("\n");
+      const lineHeight = 130 * scale;
+      const titleLastLineY = height / 2 + (lines.length - 1) * lineHeight / 2;
+      authorY = titleLastLineY + 100 * scale; // タイトルとの間隔を100pxに
+    } else {
+      // タイトルがない場合は中央から少し下に配置
+      authorY = height / 2 + 50 * scale;
+    }
+    
+    ctx.fillText("yamotty", width / 2, authorY);
   };
 
   const generateImage = async () => {
