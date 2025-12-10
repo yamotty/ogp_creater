@@ -4,68 +4,93 @@ import { useState, useRef, useEffect } from "react";
 
 export default function Home() {
   const [title, setTitle] = useState("");
+  const [authorName, setAuthorName] = useState("yamotty");
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const drawBackground = (ctx: CanvasRenderingContext2D) => {
     const width = 1920;
     const height = 1080;
 
-    // 明るいブルーグレーのベース背景
-    ctx.fillStyle = "#A8B8C8";
+    // 明るいブルーグレーのベース背景（より洗練された色）
+    ctx.fillStyle = "#B5C5D5";
     ctx.fillRect(0, 0, width, height);
 
-    // アイキャッチなアクセントを追加
-    // 右上に大きなグラデーション円
-    const gradient1 = ctx.createRadialGradient(width * 0.85, height * 0.15, 0, width * 0.85, height * 0.15, 700);
-    gradient1.addColorStop(0, "rgba(100, 150, 200, 0.4)");
-    gradient1.addColorStop(0.5, "rgba(100, 150, 200, 0.2)");
-    gradient1.addColorStop(1, "rgba(100, 150, 200, 0)");
+    // おしゃれなグラデーションオーバーレイ
+    // 右上から左下への大きなグラデーション
+    const mainGradient = ctx.createLinearGradient(width * 0.8, 0, width * 0.2, height);
+    mainGradient.addColorStop(0, "rgba(150, 180, 210, 0.3)");
+    mainGradient.addColorStop(0.5, "rgba(180, 200, 220, 0.15)");
+    mainGradient.addColorStop(1, "rgba(130, 160, 190, 0.25)");
+    ctx.fillStyle = mainGradient;
+    ctx.fillRect(0, 0, width, height);
+
+    // 右上に大きなグラデーション円（より洗練された）
+    const gradient1 = ctx.createRadialGradient(width * 0.9, height * 0.1, 0, width * 0.9, height * 0.1, 800);
+    gradient1.addColorStop(0, "rgba(120, 160, 200, 0.35)");
+    gradient1.addColorStop(0.4, "rgba(120, 160, 200, 0.2)");
+    gradient1.addColorStop(1, "rgba(120, 160, 200, 0)");
     ctx.fillStyle = gradient1;
     ctx.fillRect(0, 0, width, height);
 
-    // 左下にアクセント円
-    const gradient2 = ctx.createRadialGradient(width * 0.15, height * 0.85, 0, width * 0.15, height * 0.85, 600);
-    gradient2.addColorStop(0, "rgba(120, 170, 220, 0.35)");
-    gradient2.addColorStop(0.5, "rgba(120, 170, 220, 0.15)");
-    gradient2.addColorStop(1, "rgba(120, 170, 220, 0)");
+    // 左下にアクセント円（より洗練された）
+    const gradient2 = ctx.createRadialGradient(width * 0.1, height * 0.9, 0, width * 0.1, height * 0.9, 700);
+    gradient2.addColorStop(0, "rgba(140, 180, 220, 0.3)");
+    gradient2.addColorStop(0.4, "rgba(140, 180, 220, 0.15)");
+    gradient2.addColorStop(1, "rgba(140, 180, 220, 0)");
     ctx.fillStyle = gradient2;
     ctx.fillRect(0, 0, width, height);
 
-    // 中央上部に小さなアクセント
-    const gradient3 = ctx.createRadialGradient(width * 0.5, height * 0.2, 0, width * 0.5, height * 0.2, 400);
-    gradient3.addColorStop(0, "rgba(140, 180, 230, 0.25)");
-    gradient3.addColorStop(1, "rgba(140, 180, 230, 0)");
+    // 中央左側に小さなアクセント
+    const gradient3 = ctx.createRadialGradient(width * 0.2, height * 0.5, 0, width * 0.2, height * 0.5, 500);
+    gradient3.addColorStop(0, "rgba(160, 190, 230, 0.2)");
+    gradient3.addColorStop(1, "rgba(160, 190, 230, 0)");
     ctx.fillStyle = gradient3;
     ctx.fillRect(0, 0, width, height);
 
-    // 微細なドットパターンでテクスチャを追加
-    ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
-    for (let x = 0; x < width; x += 50) {
-      for (let y = 0; y < height; y += 50) {
-        if ((x + y) % 100 === 0) {
+    // 微細なドットパターンでテクスチャを追加（より上品に）
+    ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
+    for (let x = 0; x < width; x += 60) {
+      for (let y = 0; y < height; y += 60) {
+        if ((x + y) % 120 === 0) {
           ctx.beginPath();
-          ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
           ctx.fill();
         }
       }
     }
 
-    // 装飾的な線を追加（控えめに）
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
-    ctx.lineWidth = 2;
-    // 右上から左下への斜め線
-    ctx.beginPath();
-    ctx.moveTo(width * 0.7, 0);
-    ctx.lineTo(width, height * 0.3);
-    ctx.stroke();
-    // 左上から右下への斜め線
-    ctx.beginPath();
-    ctx.moveTo(0, height * 0.3);
-    ctx.lineTo(width * 0.3, height);
-    ctx.stroke();
+    // 装飾的な幾何学パターン（より洗練された）
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+    ctx.lineWidth = 1.5;
+    
+    // 右上から左下への斜め線（複数本）
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      ctx.moveTo(width * (0.6 + i * 0.1), 0);
+      ctx.lineTo(width, height * (0.2 + i * 0.1));
+      ctx.stroke();
+    }
+    
+    // 左上から右下への斜め線（複数本）
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      ctx.moveTo(0, height * (0.2 + i * 0.1));
+      ctx.lineTo(width * (0.3 + i * 0.1), height);
+      ctx.stroke();
+    }
+
+    // 装飾的な円形パターン（控えめに）
+    ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+    for (let x = 300; x < width; x += 600) {
+      for (let y = 200; y < height; y += 500) {
+        ctx.beginPath();
+        ctx.arc(x, y, 80, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
   };
 
-  const drawText = (ctx: CanvasRenderingContext2D, text: string, scale: number = 1) => {
+  const drawText = (ctx: CanvasRenderingContext2D, text: string, authorName: string, scale: number = 1) => {
     const width = 1920;
     const height = 1080;
 
@@ -89,24 +114,26 @@ export default function Home() {
       });
     }
 
-    // 筆者名を描画（タイトルとの間隔を広げる）
-    ctx.fillStyle = "#000000";
-    const authorFontSize = 48 * scale;
-    ctx.font = `bold ${authorFontSize}px 'Montserrat', sans-serif`;
-    
-    // タイトルの最後の行の位置を計算
-    let authorY: number;
-    if (text) {
-      const lines = text.split("\n");
-      const lineHeight = 130 * scale;
-      const titleLastLineY = height / 2 + (lines.length - 1) * lineHeight / 2;
-      authorY = titleLastLineY + 100 * scale; // タイトルとの間隔を100pxに
-    } else {
-      // タイトルがない場合は中央から少し下に配置
-      authorY = height / 2 + 50 * scale;
+    // 筆者名を描画（タイトルとの間隔をより広げる）
+    if (authorName) {
+      ctx.fillStyle = "#000000";
+      const authorFontSize = 48 * scale;
+      ctx.font = `bold ${authorFontSize}px 'Montserrat', sans-serif`;
+      
+      // タイトルの最後の行の位置を計算
+      let authorY: number;
+      if (text) {
+        const lines = text.split("\n");
+        const lineHeight = 130 * scale;
+        const titleLastLineY = height / 2 + (lines.length - 1) * lineHeight / 2;
+        authorY = titleLastLineY + 180 * scale; // タイトルとの間隔を180pxに拡大
+      } else {
+        // タイトルがない場合は中央から少し下に配置
+        authorY = height / 2 + 100 * scale;
+      }
+      
+      ctx.fillText(authorName, width / 2, authorY);
     }
-    
-    ctx.fillText("yamotty", width / 2, authorY);
   };
 
   const generateImage = async () => {
@@ -140,12 +167,12 @@ export default function Home() {
     drawBackground(ctx);
 
     // テキストを描画（scaleは既に適用されているので1を渡す）
-    drawText(ctx, title, 1);
+    drawText(ctx, title, authorName, 1);
   };
 
   useEffect(() => {
     generateImage();
-  }, [title]);
+  }, [title, authorName]);
 
   const downloadImage = () => {
     const canvas = canvasRef.current;
@@ -191,6 +218,19 @@ export default function Home() {
               <p className="mt-1 text-sm text-gray-500">
                 {title.length}/32文字
               </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                筆者名
+              </label>
+              <input
+                type="text"
+                value={authorName}
+                onChange={(e) => setAuthorName(e.target.value)}
+                placeholder="筆者名を入力してください"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
             </div>
 
             <button
