@@ -62,7 +62,7 @@ export default function Home() {
     }
   };
 
-  const drawText = (ctx: CanvasRenderingContext2D, text: string) => {
+  const drawText = (ctx: CanvasRenderingContext2D, text: string, scale: number = 1) => {
     const width = 1920;
     const height = 1080;
 
@@ -73,11 +73,12 @@ export default function Home() {
       ctx.textBaseline = "middle";
 
       // 日本語用フォント（Noto Sans JP）
-      ctx.font = "bold 80px 'Noto Sans JP', sans-serif";
+      const titleFontSize = 80 * scale;
+      ctx.font = `bold ${titleFontSize}px 'Noto Sans JP', sans-serif`;
       
       // 改行を考慮してテキストを描画
       const lines = text.split("\n");
-      const lineHeight = 100;
+      const lineHeight = 100 * scale;
       const startY = height / 2 - (lines.length - 1) * lineHeight / 2;
 
       lines.forEach((line, index) => {
@@ -87,8 +88,9 @@ export default function Home() {
 
     // 筆者名を描画
     ctx.fillStyle = "#E8E8E8";
-    ctx.font = "500 48px 'Montserrat', sans-serif";
-    ctx.fillText("yamotty", width / 2, height / 2 + 120);
+    const authorFontSize = 48 * scale;
+    ctx.font = `500 ${authorFontSize}px 'Montserrat', sans-serif`;
+    ctx.fillText("yamotty", width / 2, height / 2 + 120 * scale);
   };
 
   const generateImage = async () => {
@@ -101,17 +103,27 @@ export default function Home() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // 高解像度対応
+    // 高解像度対応（Retina対応）
     const scale = 2;
-    canvas.width = 1920 * scale;
-    canvas.height = 1080 * scale;
+    const displayWidth = 1920;
+    const displayHeight = 1080;
+    
+    // 実際のCanvasサイズ（高解像度）
+    canvas.width = displayWidth * scale;
+    canvas.height = displayHeight * scale;
+    
+    // 表示サイズ（プレビュー用）
+    canvas.style.width = `${displayWidth}px`;
+    canvas.style.height = `${displayHeight}px`;
+    
+    // スケーリング
     ctx.scale(scale, scale);
 
     // 背景を描画
     drawBackground(ctx, backgroundType);
 
-    // テキストを描画
-    drawText(ctx, title);
+    // テキストを描画（scaleは既に適用されているので1を渡す）
+    drawText(ctx, title, 1);
   };
 
   useEffect(() => {
@@ -226,11 +238,12 @@ export default function Home() {
               プレビュー
             </label>
             <div className="border border-gray-300 rounded-lg overflow-hidden bg-white p-4">
-              <canvas
-                ref={canvasRef}
-                className="w-full h-auto"
-                style={{ maxWidth: "100%", height: "auto" }}
-              />
+              <div className="flex justify-center">
+                <canvas
+                  ref={canvasRef}
+                  style={{ maxWidth: "100%", height: "auto", aspectRatio: "16/9" }}
+                />
+              </div>
             </div>
           </div>
         </div>
