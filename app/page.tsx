@@ -59,25 +59,56 @@ export default function Home() {
       }
     }
 
-    // 装飾的な幾何学パターン（より洗練された）
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+    // 装飾的な幾何学パターン（より洗練された直線パターン）
+    
+    // 右上から左下への斜め線（メインのパターン、より多く）
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
     ctx.lineWidth = 1.5;
-    
-    // 右上から左下への斜め線（複数本）
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 8; i++) {
       ctx.beginPath();
-      ctx.moveTo(width * (0.6 + i * 0.1), 0);
-      ctx.lineTo(width, height * (0.2 + i * 0.1));
+      ctx.moveTo(width * (0.4 + i * 0.08), 0);
+      ctx.lineTo(width, height * (0.1 + i * 0.1));
       ctx.stroke();
     }
     
-    // 左上から右下への斜め線（複数本）
-    for (let i = 0; i < 3; i++) {
+    // 左上から右下への斜め線（メインのパターン、より多く）
+    for (let i = 0; i < 8; i++) {
       ctx.beginPath();
-      ctx.moveTo(0, height * (0.2 + i * 0.1));
-      ctx.lineTo(width * (0.3 + i * 0.1), height);
+      ctx.moveTo(0, height * (0.1 + i * 0.1));
+      ctx.lineTo(width * (0.4 + i * 0.08), height);
       ctx.stroke();
     }
+    
+    // より細い補助的な斜め線（控えめに）
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 6; i++) {
+      ctx.beginPath();
+      ctx.moveTo(width * (0.5 + i * 0.06), 0);
+      ctx.lineTo(width, height * (0.15 + i * 0.12));
+      ctx.stroke();
+    }
+    
+    for (let i = 0; i < 6; i++) {
+      ctx.beginPath();
+      ctx.moveTo(0, height * (0.15 + i * 0.12));
+      ctx.lineTo(width * (0.5 + i * 0.06), height);
+      ctx.stroke();
+    }
+    
+    // 対角線のアクセント（太めの線）
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+    ctx.lineWidth = 2;
+    // 右上から左下への太い対角線
+    ctx.beginPath();
+    ctx.moveTo(width * 0.85, 0);
+    ctx.lineTo(width, height * 0.15);
+    ctx.stroke();
+    // 左上から右下への太い対角線
+    ctx.beginPath();
+    ctx.moveTo(0, height * 0.15);
+    ctx.lineTo(width * 0.15, height);
+    ctx.stroke();
   };
 
   const drawText = (ctx: CanvasRenderingContext2D, text: string, authorName: string, scale: number = 1) => {
