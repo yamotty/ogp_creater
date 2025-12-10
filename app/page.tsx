@@ -78,16 +78,6 @@ export default function Home() {
       ctx.lineTo(width * (0.3 + i * 0.1), height);
       ctx.stroke();
     }
-
-    // 装飾的な円形パターン（控えめに）
-    ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
-    for (let x = 300; x < width; x += 600) {
-      for (let y = 200; y < height; y += 500) {
-        ctx.beginPath();
-        ctx.arc(x, y, 80, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
   };
 
   const drawText = (ctx: CanvasRenderingContext2D, text: string, authorName: string, scale: number = 1) => {
@@ -96,7 +86,7 @@ export default function Home() {
 
     // タイトルを描画
     if (text) {
-      ctx.fillStyle = "#000000";
+      ctx.fillStyle = "#FFFFFF";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
@@ -116,7 +106,7 @@ export default function Home() {
 
     // 筆者名を描画（タイトルとの間隔をより広げる）
     if (authorName) {
-      ctx.fillStyle = "#000000";
+      ctx.fillStyle = "#FFFFFF";
       const authorFontSize = 48 * scale;
       ctx.font = `bold ${authorFontSize}px 'Montserrat', sans-serif`;
       
