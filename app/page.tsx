@@ -11,39 +11,39 @@ export default function Home() {
     const width = 1920;
     const height = 1080;
 
-    // 明るいブルーグレーのベース背景（より洗練された色）
-    ctx.fillStyle = "#B5C5D5";
+    // 濃いめのブルーグレーのベース背景（テキストの視認性を向上）
+    ctx.fillStyle = "#7A8B98";
     ctx.fillRect(0, 0, width, height);
 
     // おしゃれなグラデーションオーバーレイ
     // 右上から左下への大きなグラデーション
     const mainGradient = ctx.createLinearGradient(width * 0.8, 0, width * 0.2, height);
-    mainGradient.addColorStop(0, "rgba(150, 180, 210, 0.3)");
-    mainGradient.addColorStop(0.5, "rgba(180, 200, 220, 0.15)");
-    mainGradient.addColorStop(1, "rgba(130, 160, 190, 0.25)");
+    mainGradient.addColorStop(0, "rgba(100, 130, 160, 0.3)");
+    mainGradient.addColorStop(0.5, "rgba(120, 150, 180, 0.2)");
+    mainGradient.addColorStop(1, "rgba(90, 120, 150, 0.3)");
     ctx.fillStyle = mainGradient;
     ctx.fillRect(0, 0, width, height);
 
     // 右上に大きなグラデーション円（より洗練された）
     const gradient1 = ctx.createRadialGradient(width * 0.9, height * 0.1, 0, width * 0.9, height * 0.1, 800);
-    gradient1.addColorStop(0, "rgba(120, 160, 200, 0.35)");
-    gradient1.addColorStop(0.4, "rgba(120, 160, 200, 0.2)");
-    gradient1.addColorStop(1, "rgba(120, 160, 200, 0)");
+    gradient1.addColorStop(0, "rgba(80, 120, 160, 0.4)");
+    gradient1.addColorStop(0.4, "rgba(80, 120, 160, 0.25)");
+    gradient1.addColorStop(1, "rgba(80, 120, 160, 0)");
     ctx.fillStyle = gradient1;
     ctx.fillRect(0, 0, width, height);
 
     // 左下にアクセント円（より洗練された）
     const gradient2 = ctx.createRadialGradient(width * 0.1, height * 0.9, 0, width * 0.1, height * 0.9, 700);
-    gradient2.addColorStop(0, "rgba(140, 180, 220, 0.3)");
-    gradient2.addColorStop(0.4, "rgba(140, 180, 220, 0.15)");
-    gradient2.addColorStop(1, "rgba(140, 180, 220, 0)");
+    gradient2.addColorStop(0, "rgba(100, 140, 180, 0.35)");
+    gradient2.addColorStop(0.4, "rgba(100, 140, 180, 0.2)");
+    gradient2.addColorStop(1, "rgba(100, 140, 180, 0)");
     ctx.fillStyle = gradient2;
     ctx.fillRect(0, 0, width, height);
 
     // 中央左側に小さなアクセント
     const gradient3 = ctx.createRadialGradient(width * 0.2, height * 0.5, 0, width * 0.2, height * 0.5, 500);
-    gradient3.addColorStop(0, "rgba(160, 190, 230, 0.2)");
-    gradient3.addColorStop(1, "rgba(160, 190, 230, 0)");
+    gradient3.addColorStop(0, "rgba(110, 150, 190, 0.25)");
+    gradient3.addColorStop(1, "rgba(110, 150, 190, 0)");
     ctx.fillStyle = gradient3;
     ctx.fillRect(0, 0, width, height);
 
