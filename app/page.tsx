@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 
-type BackgroundType = "solid" | "gradient" | "pattern";
+type BackgroundType = "solid" | "pattern";
 
 export default function Home() {
   const [title, setTitle] = useState("");
@@ -18,43 +18,80 @@ export default function Home() {
 
     switch (type) {
       case "solid":
-        // ブルーグレーの単色背景
-        ctx.fillStyle = "#6B7A8F";
+        // 明るいブルーグレーのベース背景
+        ctx.fillStyle = "#A8B8C8";
         ctx.fillRect(0, 0, width, height);
-        break;
 
-      case "gradient":
-        // ブルーグレーのグラデーション背景
-        const gradient = ctx.createLinearGradient(0, 0, width, height);
-        gradient.addColorStop(0, "#5A6B7F");
-        gradient.addColorStop(1, "#7B8A9F");
-        ctx.fillStyle = gradient;
+        // アイキャッチなアクセントを追加
+        // 右上にグラデーション円
+        const gradient1 = ctx.createRadialGradient(width * 0.85, height * 0.15, 0, width * 0.85, height * 0.15, 600);
+        gradient1.addColorStop(0, "rgba(100, 150, 200, 0.3)");
+        gradient1.addColorStop(1, "rgba(100, 150, 200, 0)");
+        ctx.fillStyle = gradient1;
         ctx.fillRect(0, 0, width, height);
+
+        // 左下にアクセント円
+        const gradient2 = ctx.createRadialGradient(width * 0.15, height * 0.85, 0, width * 0.15, height * 0.85, 500);
+        gradient2.addColorStop(0, "rgba(120, 170, 220, 0.25)");
+        gradient2.addColorStop(1, "rgba(120, 170, 220, 0)");
+        ctx.fillStyle = gradient2;
+        ctx.fillRect(0, 0, width, height);
+
+        // 微細なドットパターンでテクスチャを追加
+        ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+        for (let x = 0; x < width; x += 40) {
+          for (let y = 0; y < height; y += 40) {
+            if ((x + y) % 80 === 0) {
+              ctx.fillRect(x, y, 2, 2);
+            }
+          }
+        }
         break;
 
       case "pattern":
-        // ブルーグレーベースの幾何学模様
-        ctx.fillStyle = "#6B7A8F";
+        // 明るいブルーグレーのベース背景
+        ctx.fillStyle = "#A8B8C8";
         ctx.fillRect(0, 0, width, height);
 
-        // 視認性を落とさない程度の幾何学模様を描画
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
-        ctx.lineWidth = 2;
+        // アイキャッチな幾何学模様
+        // 大きな円形パターン
+        ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+        for (let x = 0; x < width; x += 300) {
+          for (let y = 0; y < height; y += 300) {
+            ctx.beginPath();
+            ctx.arc(x, y, 120, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
 
-        // 斜めの線パターン
-        for (let i = -height; i < width + height; i += 80) {
+        // 斜めのストライプパターン
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+        ctx.lineWidth = 3;
+        for (let i = -height; i < width + height; i += 100) {
           ctx.beginPath();
           ctx.moveTo(i, 0);
           ctx.lineTo(i + height, height);
           ctx.stroke();
         }
 
-        // 円形パターン
-        ctx.fillStyle = "rgba(255, 255, 255, 0.05)";
-        for (let x = 200; x < width; x += 400) {
-          for (let y = 200; y < height; y += 400) {
+        // 対角線のアクセント
+        ctx.strokeStyle = "rgba(100, 150, 200, 0.3)";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(width, height);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(width, 0);
+        ctx.lineTo(0, height);
+        ctx.stroke();
+
+        // 小さな装飾的な円
+        ctx.fillStyle = "rgba(120, 170, 220, 0.2)";
+        for (let x = 150; x < width; x += 400) {
+          for (let y = 150; y < height; y += 400) {
             ctx.beginPath();
-            ctx.arc(x, y, 150, 0, Math.PI * 2);
+            ctx.arc(x, y, 60, 0, Math.PI * 2);
             ctx.fill();
           }
         }
@@ -112,9 +149,10 @@ export default function Home() {
     canvas.width = displayWidth * scale;
     canvas.height = displayHeight * scale;
     
-    // 表示サイズ（プレビュー用）
-    canvas.style.width = `${displayWidth}px`;
-    canvas.style.height = `${displayHeight}px`;
+    // 表示サイズはCSSでアスペクト比を維持（幅100%、高さ自動）
+    canvas.style.width = "100%";
+    canvas.style.height = "auto";
+    canvas.style.aspectRatio = "16/9";
     
     // スケーリング
     ctx.scale(scale, scale);
@@ -198,19 +236,6 @@ export default function Home() {
                   <input
                     type="radio"
                     name="background"
-                    value="gradient"
-                    checked={backgroundType === "gradient"}
-                    onChange={(e) =>
-                      setBackgroundType(e.target.value as BackgroundType)
-                    }
-                    className="w-4 h-4 text-blue-600"
-                  />
-                  <span>グラデーション</span>
-                </label>
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="background"
                     value="pattern"
                     checked={backgroundType === "pattern"}
                     onChange={(e) =>
@@ -238,10 +263,15 @@ export default function Home() {
               プレビュー
             </label>
             <div className="border border-gray-300 rounded-lg overflow-hidden bg-white p-4">
-              <div className="flex justify-center">
+              <div className="flex justify-center w-full">
                 <canvas
                   ref={canvasRef}
-                  style={{ maxWidth: "100%", height: "auto", aspectRatio: "16/9" }}
+                  style={{ 
+                    width: "100%", 
+                    height: "auto", 
+                    aspectRatio: "16/9",
+                    display: "block"
+                  }}
                 />
               </div>
             </div>
