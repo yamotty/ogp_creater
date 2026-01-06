@@ -2,49 +2,128 @@
 
 import { useState, useRef, useEffect } from "react";
 
+type BackgroundTheme = "blue" | "green" | "red";
+
 export default function Home() {
   const [title, setTitle] = useState("");
   const [authorName, setAuthorName] = useState("yamotty");
   const [fileName, setFileName] = useState("");
+  const [backgroundTheme, setBackgroundTheme] = useState<BackgroundTheme>("blue");
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const drawBackground = (ctx: CanvasRenderingContext2D) => {
+  const getThemeColors = (theme: BackgroundTheme) => {
+    switch (theme) {
+      case "green":
+        return {
+          base: "#7A9A7A",
+          mainGradient: [
+            "rgba(80, 140, 100, 0.3)",
+            "rgba(100, 160, 120, 0.2)",
+            "rgba(70, 130, 90, 0.3)"
+          ],
+          gradient1: [
+            "rgba(60, 130, 80, 0.4)",
+            "rgba(60, 130, 80, 0.25)",
+            "rgba(60, 130, 80, 0)"
+          ],
+          gradient2: [
+            "rgba(80, 150, 100, 0.35)",
+            "rgba(80, 150, 100, 0.2)",
+            "rgba(80, 150, 100, 0)"
+          ],
+          gradient3: [
+            "rgba(90, 160, 110, 0.25)",
+            "rgba(90, 160, 110, 0)"
+          ]
+        };
+      case "red":
+        return {
+          base: "#9A7A7A",
+          mainGradient: [
+            "rgba(160, 100, 100, 0.3)",
+            "rgba(180, 120, 120, 0.2)",
+            "rgba(150, 90, 90, 0.3)"
+          ],
+          gradient1: [
+            "rgba(160, 80, 80, 0.4)",
+            "rgba(160, 80, 80, 0.25)",
+            "rgba(160, 80, 80, 0)"
+          ],
+          gradient2: [
+            "rgba(180, 100, 100, 0.35)",
+            "rgba(180, 100, 100, 0.2)",
+            "rgba(180, 100, 100, 0)"
+          ],
+          gradient3: [
+            "rgba(190, 110, 110, 0.25)",
+            "rgba(190, 110, 110, 0)"
+          ]
+        };
+      case "blue":
+      default:
+        return {
+          base: "#7A8B98",
+          mainGradient: [
+            "rgba(100, 130, 160, 0.3)",
+            "rgba(120, 150, 180, 0.2)",
+            "rgba(90, 120, 150, 0.3)"
+          ],
+          gradient1: [
+            "rgba(80, 120, 160, 0.4)",
+            "rgba(80, 120, 160, 0.25)",
+            "rgba(80, 120, 160, 0)"
+          ],
+          gradient2: [
+            "rgba(100, 140, 180, 0.35)",
+            "rgba(100, 140, 180, 0.2)",
+            "rgba(100, 140, 180, 0)"
+          ],
+          gradient3: [
+            "rgba(110, 150, 190, 0.25)",
+            "rgba(110, 150, 190, 0)"
+          ]
+        };
+    }
+  };
+
+  const drawBackground = (ctx: CanvasRenderingContext2D, theme: BackgroundTheme) => {
     const width = 1920;
     const height = 1080;
+    const colors = getThemeColors(theme);
 
-    // 濃いめのブルーグレーのベース背景（テキストの視認性を向上）
-    ctx.fillStyle = "#7A8B98";
+    // 濃いめのベース背景（テキストの視認性を向上）
+    ctx.fillStyle = colors.base;
     ctx.fillRect(0, 0, width, height);
 
     // おしゃれなグラデーションオーバーレイ
     // 右上から左下への大きなグラデーション
     const mainGradient = ctx.createLinearGradient(width * 0.8, 0, width * 0.2, height);
-    mainGradient.addColorStop(0, "rgba(100, 130, 160, 0.3)");
-    mainGradient.addColorStop(0.5, "rgba(120, 150, 180, 0.2)");
-    mainGradient.addColorStop(1, "rgba(90, 120, 150, 0.3)");
+    mainGradient.addColorStop(0, colors.mainGradient[0]);
+    mainGradient.addColorStop(0.5, colors.mainGradient[1]);
+    mainGradient.addColorStop(1, colors.mainGradient[2]);
     ctx.fillStyle = mainGradient;
     ctx.fillRect(0, 0, width, height);
 
     // 右上に大きなグラデーション円（より洗練された）
     const gradient1 = ctx.createRadialGradient(width * 0.9, height * 0.1, 0, width * 0.9, height * 0.1, 800);
-    gradient1.addColorStop(0, "rgba(80, 120, 160, 0.4)");
-    gradient1.addColorStop(0.4, "rgba(80, 120, 160, 0.25)");
-    gradient1.addColorStop(1, "rgba(80, 120, 160, 0)");
+    gradient1.addColorStop(0, colors.gradient1[0]);
+    gradient1.addColorStop(0.4, colors.gradient1[1]);
+    gradient1.addColorStop(1, colors.gradient1[2]);
     ctx.fillStyle = gradient1;
     ctx.fillRect(0, 0, width, height);
 
     // 左下にアクセント円（より洗練された）
     const gradient2 = ctx.createRadialGradient(width * 0.1, height * 0.9, 0, width * 0.1, height * 0.9, 700);
-    gradient2.addColorStop(0, "rgba(100, 140, 180, 0.35)");
-    gradient2.addColorStop(0.4, "rgba(100, 140, 180, 0.2)");
-    gradient2.addColorStop(1, "rgba(100, 140, 180, 0)");
+    gradient2.addColorStop(0, colors.gradient2[0]);
+    gradient2.addColorStop(0.4, colors.gradient2[1]);
+    gradient2.addColorStop(1, colors.gradient2[2]);
     ctx.fillStyle = gradient2;
     ctx.fillRect(0, 0, width, height);
 
     // 中央左側に小さなアクセント
     const gradient3 = ctx.createRadialGradient(width * 0.2, height * 0.5, 0, width * 0.2, height * 0.5, 500);
-    gradient3.addColorStop(0, "rgba(110, 150, 190, 0.25)");
-    gradient3.addColorStop(1, "rgba(110, 150, 190, 0)");
+    gradient3.addColorStop(0, colors.gradient3[0]);
+    gradient3.addColorStop(1, colors.gradient3[1]);
     ctx.fillStyle = gradient3;
     ctx.fillRect(0, 0, width, height);
 
@@ -186,7 +265,7 @@ export default function Home() {
     ctx.scale(scale, scale);
 
     // 背景を描画
-    drawBackground(ctx);
+    drawBackground(ctx, backgroundTheme);
 
     // テキストを描画（scaleは既に適用されているので1を渡す）
     drawText(ctx, title, authorName, 1);
@@ -194,7 +273,7 @@ export default function Home() {
 
   useEffect(() => {
     generateImage();
-  }, [title, authorName]);
+  }, [title, authorName, backgroundTheme]);
 
   const downloadImage = () => {
     const canvas = canvasRef.current;
@@ -264,6 +343,47 @@ export default function Home() {
                 placeholder="筆者名を入力してください"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                背景色テーマ
+              </label>
+              <div className="grid grid-cols-3 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setBackgroundTheme("blue")}
+                  className={`px-4 py-3 rounded-lg font-medium transition-colors ${
+                    backgroundTheme === "blue"
+                      ? "bg-blue-600 text-white ring-2 ring-blue-500"
+                      : "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                  }`}
+                >
+                  青系
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBackgroundTheme("green")}
+                  className={`px-4 py-3 rounded-lg font-medium transition-colors ${
+                    backgroundTheme === "green"
+                      ? "bg-green-600 text-white ring-2 ring-green-500"
+                      : "bg-green-100 text-green-700 hover:bg-green-200"
+                  }`}
+                >
+                  緑系
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBackgroundTheme("red")}
+                  className={`px-4 py-3 rounded-lg font-medium transition-colors ${
+                    backgroundTheme === "red"
+                      ? "bg-red-600 text-white ring-2 ring-red-500"
+                      : "bg-red-100 text-red-700 hover:bg-red-200"
+                  }`}
+                >
+                  赤系
+                </button>
+              </div>
             </div>
 
             <div>
