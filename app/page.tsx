@@ -9,6 +9,7 @@ export default function Home() {
   const [authorName, setAuthorName] = useState("yamotty");
   const [fileName, setFileName] = useState("");
   const [backgroundTheme, setBackgroundTheme] = useState<BackgroundTheme>("blue");
+  const [titleFontSize, setTitleFontSize] = useState(80);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const getThemeColors = (theme: BackgroundTheme) => {
@@ -191,7 +192,7 @@ export default function Home() {
     ctx.stroke();
   };
 
-  const drawText = (ctx: CanvasRenderingContext2D, text: string, authorName: string, scale: number = 1) => {
+  const drawText = (ctx: CanvasRenderingContext2D, text: string, authorName: string, fontSize: number, scale: number = 1) => {
     const width = 1920;
     const height = 1080;
 
@@ -202,12 +203,12 @@ export default function Home() {
       ctx.textBaseline = "middle";
 
       // 日本語用フォント（Noto Sans JP）
-      const titleFontSize = 80 * scale;
+      const titleFontSize = fontSize * scale;
       ctx.font = `bold ${titleFontSize}px 'Noto Sans JP', sans-serif`;
       
       // 改行を考慮してテキストを描画
       const lines = text.split("\n");
-      const lineHeight = 130 * scale; // 行間を広げる
+      const lineHeight = fontSize * 1.625 * scale; // フォントサイズに応じて行間を調整
       const startY = height / 2 - (lines.length - 1) * lineHeight / 2;
 
       lines.forEach((line, index) => {
@@ -225,9 +226,9 @@ export default function Home() {
       let authorY: number;
       if (text) {
         const lines = text.split("\n");
-        const lineHeight = 130 * scale;
+        const lineHeight = fontSize * 1.625 * scale;
         const titleLastLineY = height / 2 + (lines.length - 1) * lineHeight / 2;
-        authorY = titleLastLineY + 180 * scale; // タイトルとの間隔を180pxに拡大
+        authorY = titleLastLineY + fontSize * 2.25 * scale; // タイトルとの間隔をフォントサイズに応じて調整
       } else {
         // タイトルがない場合は中央から少し下に配置
         authorY = height / 2 + 100 * scale;
@@ -268,12 +269,12 @@ export default function Home() {
     drawBackground(ctx, backgroundTheme);
 
     // テキストを描画（scaleは既に適用されているので1を渡す）
-    drawText(ctx, title, authorName, 1);
+    drawText(ctx, title, authorName, titleFontSize, 1);
   };
 
   useEffect(() => {
     generateImage();
-  }, [title, authorName, backgroundTheme]);
+  }, [title, authorName, backgroundTheme, titleFontSize]);
 
   const downloadImage = () => {
     const canvas = canvasRef.current;
@@ -383,6 +384,25 @@ export default function Home() {
                 >
                   赤系
                 </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                タイトルフォントサイズ: {titleFontSize}px
+              </label>
+              <input
+                type="range"
+                min="40"
+                max="120"
+                value={titleFontSize}
+                onChange={(e) => setTitleFontSize(Number(e.target.value))}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>40px</span>
+                <span>80px</span>
+                <span>120px</span>
               </div>
             </div>
 
